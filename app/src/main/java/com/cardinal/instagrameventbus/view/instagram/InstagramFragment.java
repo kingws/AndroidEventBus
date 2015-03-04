@@ -19,6 +19,7 @@ import com.cardinal.instagrameventbus.controller.BusProvider;
 import com.cardinal.instagrameventbus.events.GetInstagramResultsEvent;
 import com.cardinal.instagrameventbus.events.InstagramResultsLoadedEvent;
 import com.cardinal.instagrameventbus.events.InstagramResultsLoadedNextPageEvent;
+import com.cardinal.instagrameventbus.listeners.EndlessRecyclerOnScrollListener;
 import com.cardinal.instagrameventbus.listeners.RecyclerItemClickListener;
 import com.cardinal.instagrameventbus.model.Instagram;
 import com.cardinal.instagrameventbus.utils.AppConstants;
@@ -57,15 +58,11 @@ public class InstagramFragment extends Fragment implements Callback<List<Instagr
 
     private LinearLayoutManager mLayoutManager;
 
-    private AlertDialog mAlertDialog;
-
     private boolean reloadingData;
 
     private String mNextMaxID;
 
     private String mHashtag;
-
-    int pastVisiblesItems, visibleItemCount, totalItemCount;
 
 	public InstagramFragment() { }
 
@@ -80,41 +77,18 @@ public class InstagramFragment extends Fragment implements Callback<List<Instagr
 		setHasOptionsMenu(true);
 	}
 
-    private void createRecyclerView() {
-
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getActivity().getApplicationContext(),
-                        new RecyclerItemClickListener.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                mListener.onInstagramFragmentInteraction(
-                                        mDataList.get(position).getImages().getStandardResolution().getUrl(),
-                                        mDataList.get(position).getUser().getUsername(),
-                                        mDataList.get(position).getLink());
-                            }
-                }));
-        mAdapter = new InstagramRecyclerView(mDataList, R.layout.row_instagram, getActivity());
-        mRecyclerView.setAdapter(mAdapter);
+    private void updateListAdapter() {
+        if (mDataList != null && getActivity() != null) {
+            mAdapter = new InstagramRecyclerView(mDataList, R.layout.row_instagram, getActivity());
+            mRecyclerView.setAdapter(mAdapter);
+        }
     }
-
     private void updateScrollListener() {
 
-        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
-                visibleItemCount = mLayoutManager.getChildCount();
-                totalItemCount = mLayoutManager.getItemCount();
-                pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
-
-                if (!reloadingData) {
-                    if ( (visibleItemCount+pastVisiblesItems) >= totalItemCount) {
-                        BusProvider.getInstance().post(new GetInstagramResultsEvent(mHashtag, mNextMaxID));
-                    }
-                }
+            public void onLoadMore(int current_page) {
+                BusProvider.getInstance().post(new GetInstagramResultsEvent(mHashtag, mNextMaxID));
             }
         });
     }
@@ -128,23 +102,44 @@ public class InstagramFragment extends Fragment implements Callback<List<Instagr
         mSwipeLayout.setOnRefreshListener(this);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        createRecyclerView();
+        updateListAdapter();
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        updateListAdapter();
+        mRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity().getApplicationContext(),
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                mListener.onInstagramFragmentInteraction(
+                                        mDataList.get(position).getImages().getStandardResolution().getUrl(),
+                                        mDataList.get(position).getUser().getUsername(),
+                                        mDataList.get(position).getLink());
+                            }
+                        }));
         updateScrollListener();
-
 		return view;
 	}
 
     @Subscribe
 	public void instagramResultsLoadedEvent(InstagramResultsLoadedEvent event) {
         //Make sure that we succeeded and that this is not a next page event.
-		if (event.success && !(event instanceof InstagramResultsLoadedNextPageEvent)) {
-			mInstagramData = event;
+        if (event.success && !(event instanceof InstagramResultsLoadedNextPageEvent)) {
+            mInstagramData = event;
             mDataList.clear();
-			mDataList.addAll(mInstagramData.instagramResults.getData());
+            mDataList.addAll(mInstagramData.instagramResults.getData());
             mNextMaxID = mInstagramData.instagramResults.getPagination().getNextMaxTagId();
-            createRecyclerView();
+            //If there is no next max id, set to null to cancel loading.
+            if (mNextMaxID == null) {
+                mRecyclerView.setOnScrollListener(null);
+            } else {
+                updateScrollListener();
+            }
+            updateListAdapter();
+            mAdapter.notifyDataSetChanged();
             mSwipeLayout.setRefreshing(false);
-		}
+        }
         reloadingData = false;
 	}
 
@@ -155,6 +150,11 @@ public class InstagramFragment extends Fragment implements Callback<List<Instagr
             //Append the data from the next page to the list.
             mDataList.addAll(mInstagramData.instagramResults.getData());
             mNextMaxID = mInstagramData.instagramResults.getPagination().getNextMaxTagId();
+            //If there is no next max id, set to null to cancel loading.
+            if (mNextMaxID == null) {
+                mRecyclerView.setOnScrollListener(null);
+            }
+            mAdapter.notifyDataSetChanged();
             mSwipeLayout.setRefreshing(false);
         }
     }
