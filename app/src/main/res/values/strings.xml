@@ -1,0 +1,24 @@
+<resources>
+
+    <!-- Global -->
+    <string name="app_name">Instagram Event Bus</string>
+    <string name="image_content_description">Image Content Description</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Instagram -->
+    <string name="instagram_menu">Instagram</string>
+    <string name="instagram_view_app_store_title">View Instagram on Google Play?</string>
+    <string name="instagram_view_app_store_message">Instagram is available as a free download on Google Play and is required to post conference photos.</string>
+
+    <!-- Preferences -->
+    <string name="instagram_pref_activity_title">Settings</string>
+    <string name="instagram_hastag_menu">Settings</string>
+    <string name="section_title_instagram_preference">Instagram</string>
+    <string name="title_instagram_preference">Modify Instagram Hashtag</string>
+    <string name="preference_frag_title">This is the hashtag that gets queried by the event bus.  To change the hashtag click here and type in your new one.</string>
+    <string name="default_instagram_preference">apple</string>
+
+</resources>

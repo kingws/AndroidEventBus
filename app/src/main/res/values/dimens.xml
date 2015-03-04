@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- Action Bar -->
+    <dimen name="action_bar_textSize">16sp</dimen>
+
+	<!-- Custom Dialogs -->
+	<dimen name="dialog_title_and_button_text">22sp</dimen>
+	<dimen name="dialog_message_text">17sp</dimen>
+	<dimen name="dialog_title_padding_bottom">10dp</dimen>
+	<dimen name="dialog_message_margin">10dp</dimen>
+	<dimen name="dialog_message_padding_bottom">20dp</dimen>
+    <dimen name="dialog_message_padding_top">20dp</dimen>
+
+    <!-- Fragment Lists -->
+    <dimen name="fragment_list_paddingBottom">1dp</dimen>
+    <dimen name="fragment_list_paddingLeft">12dp</dimen>
+    <dimen name="fragment_list_textSize">17sp</dimen>
+
+	<!-- Instagram -->
+	<dimen name="fragment_instagram_grid_column_width">100dp</dimen>
+    <dimen name="fragment_instagram_card_view_image">80dp</dimen>
+    <dimen name="fragment_instagram_user_text">24dp</dimen>
+    <dimen name="fragment_instagram_url_text">18dp</dimen>
+
+</resources>

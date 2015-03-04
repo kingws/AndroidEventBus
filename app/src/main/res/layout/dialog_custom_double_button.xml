@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="10dp" >
+
+    <TextView
+        android:id="@+id/dialog_double_button_title_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="@dimen/dialog_title_and_button_text"
+        android:textStyle="bold"
+        android:paddingBottom="@dimen/dialog_title_padding_bottom"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/dialog_double_button_text_view"
+        android:layout_below="@id/dialog_double_button_title_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="@dimen/dialog_message_text"
+        android:layout_marginLeft="@dimen/dialog_message_margin"
+        android:layout_marginRight="@dimen/dialog_message_margin"
+        android:paddingBottom="@dimen/dialog_message_padding_bottom"
+        android:textColor="@color/black" />
+
+    <LinearLayout
+        android:id="@+id/custom_dialog_buttons_layout"
+        android:layout_below="@id/dialog_double_button_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/dialog_double_button_no_button"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/no"
+            android:gravity="center"
+            android:textSize="@dimen/dialog_title_and_button_text"
+            android:textColor="@color/black"
+            android:background="@drawable/white_button" />
+
+        <Button
+            android:id="@+id/dialog_double_button_ok_button"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/yes"
+            android:gravity="center"
+            android:textSize="@dimen/dialog_title_and_button_text"
+            android:textColor="@color/black"
+            android:background="@drawable/white_button" />
+
+    </LinearLayout>
+
+</RelativeLayout>
