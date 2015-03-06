@@ -1,7 +1,6 @@
 package com.cardinal.instagrameventbus.view.instagram;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
