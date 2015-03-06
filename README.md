@@ -173,7 +173,7 @@ The GetInstagramResult object is where the serialization occurs.  When the servi
 
  RecyclerView came out with the Android L preview release and is part of the support library, if you're not using it yet you need to be.  The big take away is it's much (much) smoother and faster than the old ListView.  Using it is pretty straight forward, there's tons of good examples for it at this point.  What I really wanted to point out was the use of endless scrolling in this app, not something that comes out of the box with RecyclerView (or any Android ListView).  
 
-In our fragemnt, we apply the scroll listener to the recycler view:
+In our fragment, we apply the scroll listener to the recycler view:
 
 ```Java
 private void updateScrollListener() {
