@@ -57,7 +57,7 @@ public void onDetach() {
 
 NOTE: Registering will only find methods on the immediate class type.  Otto will not traverse the class hierarchy and add methods from base classes or interfaces that are annotated!!
 
-Once you have your bus set up and registered, you simply publish your events for the subsribers of that type.  For the purposes of this app, we're publishing an event of type GetInstagramResultsEvent() and passing in a custom hashtag string to the API (more on that in the Retrofit section):
+Once you have your bus set up and registered, you simply publish your events for the subscribers of that type.  For the purposes of this app, we're publishing an event of type GetInstagramResultsEvent() and passing in a custom hashtag string to the API (more on that in the Retrofit section):
 
 ```Java
 BusProvider.getInstance().post(new GetInstagramResultsEvent(mHashtag));
@@ -161,15 +161,13 @@ If you don't add the Callback then your request is synchronized and your executi
 
 In my opinion, this little secret I'm going to tell you about is worth the cost of admission...  If you're using an existing API, in our case Instagram, you can save yourself a TON of time generating your POJOs by taking advantage of one of the (several) FREE JSON to POJO generators.  A couple of good ones are [jsonschema2pojo](http://www.jsonschema2pojo.org) and [JSON To Java](http://jsontojava.appspot.com).  They will generate the POJOs, add all the Gson (or others) annotations, and they'll even make the objects Parcelalbe for Android.  I know... nice right??  For this app I used [jsonschema2pojo](http://www.jsonschema2pojo.org).
 
-Once you've taken advantage of the awesome sauce I mentioned in the previous paragraph, you can drop your newly created (and annotaded...ady maybe Parcelable) POJOs into your project.  Now, back to the callback in the previous section.  This is where the proverbial magic happens...  
+Once you've taken advantage of the awesome sauce I mentioned in the previous paragraph, you can drop your newly created (and annotaded...and maybe Parcelable) POJOs into your project.  Now, back to the callback in the previous section.  This is where the proverbial magic happens...  
 
-The GetInstagramResult object is where the serialization occurs.  When the service call is made, the Callback fires and the JSON reponse is deserialized into the GetInstagramResult object, which is returned to method subscribed to that event.  Remember at the top of the README, when I said "we need to subscribe to that event so we can "do stuff" with the response when the event is finished."?  Well, now it's finished.  We've come full circle and have an object to update our UI with, which brings us to our next and final section that I so eloquently referred to as "Added Bonuses".  Man, I'm giving lots of free stuff out here.
+The GetInstagramResult object is where the serialization occurs.  When the service call is made, the Callback fires and the JSON reponse is deserialized into the GetInstagramResult object, which is returned to the method subscribed to that event.  Remember at the top of the README, when I said "we need to subscribe to that event so we can "do stuff" with the response when the event is finished."?  Well, now it's finished.  We've come full circle and have an object to update our UI with, which brings us to our next and final section that I so eloquently referred to as "Added Bonuses".  Man, I'm giving lots of free stuff out here.
 
 ## Added Bonuses
  
  For this app, I'm taking advantage of the RecyclerView, SwipeRefreshLayout, and the Endless Scroll Listener.  I won't go too deep into these objects, as it's not really the topic of this README, but I feel they deserve a little attention.
-
- ### RecyclerView
 
  RecyclerView came out with the Android L preview release and is part of the support library, if you're not using it yet you need to be.  The big take away is it's much (much) smoother and faster than the old ListView.  Using it is pretty straight forward, there's tons of good examples for it at this point.  What I really wanted to point out was the use of endless scrolling in this app, not something that comes out of the box with RecyclerView (or any Android ListView).  
 
@@ -238,13 +236,13 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 }
 ```
 
-Pay close attention to the onScrolled overridde method.  We're calculating total items, visible items, and the first viewable item, and scrolling infinitely (or until we reach the end of our data list).  I know, it's a thing of beauty, and very simple.  You're welcome.
+Pay close attention to the onScrolled overridden method.  We're calculating total items, visible items, and the first viewable item, and scrolling infinitely (or until we reach the end of our data list).  I know, it's a thing of beauty, and very simple.  You're welcome.
 
 ### SwipeRefreshLayout
 
 Finally, a little bit about the SwipeRefreshLayout.  This handy little gem came out in the last support library update.  It's's a standard way to implement the common Pull to Refresh pattern in Android.  Hooking it up is pretty easy, and here's how we do it.
 
-All you have to do is add a scrollable view to the layout.  For this app I'm using the RecyclerView (of course...):
+All you have to do is add a scrollable view to the layout.  For this app I'm using the RecyclerView:
 
 ```XML
 <android.support.v4.widget.SwipeRefreshLayout
