@@ -1,4 +1,4 @@
-# Android Event Bus
+# Event Bus for Android
 
 I developed this app to demo the benefits of using [Retrofit](http://square.github.io/retrofit/) (combined with [Gson](https://code.google.com/p/google-gson/)) and the [Otto](http://square.github.io/otto/) event bus for the upcoming Cincinnati Tech Talk at Cardinal Solutions.  In doing so, I figured I'd share it with everyone.  During my research I found several examples of the best way to pull this off, but not a one stop shop that covered everything.  I found a great article on [A smart way to use Retrofit](http://blog.robinchutaux.com/blog/a-smart-way-to-use-retrofit/), as well as a great article on [Durable Android REST Clients](http://www.mdswanson.com/blog/2014/04/07/durable-android-rest-clients.html).  Finally, our very own [Steven McWhorter](mailto:smcwhorter@cardinalsolutions.com) wrote a great blog titled [Event Bus on Android](http://www.cardinalsolutions.com/blog/2015/02/event-bus-on-android) that covers how to use Otto very well.  This app usess Otto as the event bus and Retrofit for all the REST implementation.  The added bonuses are the utilization of the new RecyclerView, SwipeRefreshLayout, and the Endless Scroll Listener.  Lets get started...
 
@@ -6,20 +6,20 @@ I developed this app to demo the benefits of using [Retrofit](http://square.gith
 
 Your build.gradle needs the following dependencies for the features outlined below:
 
-*Android backwards compatability
- *compile 'com.android.support:appcompat-v7:21.0.3'
- *compile 'com.google.android.gms:play-services:6.5.87'
- *compile 'com.android.support:support-v4:21.0.3'
-*Material Design
- *compile 'com.android.support:cardview-v7:21.0.3'
- *compile 'com.android.support:recyclerview-v7:21.0.3'
-*JSON
- *compile 'com.google.code.gson:gson:2.2.3'
-*Image injection
- *compile 'com.squareup.picasso:picasso:2.4.0'
-*Event Bus
- *compile 'com.squareup:otto:1.3.5'
- *compile 'com.squareup.retrofit:retrofit:1.7.1'
+* Android backwards compatability
+ * compile 'com.android.support:appcompat-v7:21.0.3'
+ * compile 'com.google.android.gms:play-services:6.5.87'
+ * compile 'com.android.support:support-v4:21.0.3'
+* Material Design
+ * compile 'com.android.support:cardview-v7:21.0.3'
+ * compile 'com.android.support:recyclerview-v7:21.0.3'
+* JSON
+ * compile 'com.google.code.gson:gson:2.2.3'
+* Image injection
+ * compile 'com.squareup.picasso:picasso:2.4.0'
+* Event Bus
+ * compile 'com.squareup:otto:1.3.5'
+ * compile 'com.squareup.retrofit:retrofit:1.7.1'
 
 ## Otto
 
@@ -88,10 +88,10 @@ It's simple, fairly straight forward, but what is that InstagramClient object?? 
 
 Retrofit is a type-safe client for Android and Java.  With this library you can request the webservices of a REST api with POST, GET and more. This library is great, but we need a good architecture to do it correctly.  I'll dig deeper into each object, but for starters we'll need to set up the following:
 
-*Rest Adapter
-*API Service with Parameters
- *GET, POST, DELETE... for this app I'm only using GET
-*POJOs
+* Rest Adapter
+* API Service with Parameters
+ * GET, POST, DELETE... for this app I'm only using GET
+* POJOs
 
 ### Rest Adapter
 
