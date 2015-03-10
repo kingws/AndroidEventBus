@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.cardinal.instagrameventbus.R;
+import com.cardinal.instagrameventbus.common.MainActivity;
+import com.cardinal.instagrameventbus.controller.BusProvider;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -30,6 +32,8 @@ public class InstagramImageDisplayFragment extends Fragment {
 
 	private static Context mContext;
 
+    private boolean toolbarWasShowing = true;
+
 	public InstagramImageDisplayFragment() {}
 
 	public static InstagramImageDisplayFragment newInstance(Context ctx, String imageUrlIn, String userName, String linkURL) {
@@ -40,9 +44,15 @@ public class InstagramImageDisplayFragment extends Fragment {
 		InstagramImageDisplayFragment fragment = new InstagramImageDisplayFragment();
 		return fragment;
 	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        if (!((MainActivity)getActivity()).isToolbarShowing()) {
+            ((MainActivity)getActivity()).showViews();
+            toolbarWasShowing = false;
+        }
+
         setMenuVisibility(false);
 	}
 
@@ -61,4 +71,11 @@ public class InstagramImageDisplayFragment extends Fragment {
 		return view;
 	}
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (!toolbarWasShowing) {
+            ((MainActivity)getActivity()).hideViews();
+        }
+    }
 }

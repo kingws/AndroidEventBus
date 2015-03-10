@@ -3,6 +3,8 @@ package com.cardinal.instagrameventbus.listeners;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.cardinal.instagrameventbus.utils.Logger;
+
 /**
  * Instagram Event Bus
  *
@@ -11,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
  *         17:13
  */
 public abstract class CustomRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
+
     public static String TAG = CustomRecyclerOnScrollListener.class.getSimpleName();
 
     private static final int HIDE_THRESHOLD = 20;
@@ -38,7 +41,7 @@ public abstract class CustomRecyclerOnScrollListener extends RecyclerView.OnScro
         totalItemCount = mLinearLayoutManager.getItemCount();
         firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
 
-        displayToolbar(dy);
+        displayToolbar(recyclerView, dy);
 
         if (loading) {
 
@@ -63,16 +66,27 @@ public abstract class CustomRecyclerOnScrollListener extends RecyclerView.OnScro
 
     }
 
-    private void displayToolbar(int dy) {
+    private void displayToolbar(RecyclerView recyclerView, int dy) {
 
-        if (scrolledDistance > HIDE_THRESHOLD && controlsVisible) {
-            onHide();
-            controlsVisible = false;
-            scrolledDistance = 0;
-        } else if (scrolledDistance < -HIDE_THRESHOLD && !controlsVisible) {
-            onShow();
-            controlsVisible = true;
-            scrolledDistance = 0;
+        Logger.d(TAG, "Updating toolbar display...");
+
+        int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+        //show views if first item is first visible position and views are hidden
+        if (firstVisibleItem == 0) {
+            if(!controlsVisible) {
+                onShow();
+                controlsVisible = true;
+            }
+        } else {
+            if (scrolledDistance > HIDE_THRESHOLD && controlsVisible) {
+                onHide();
+                controlsVisible = false;
+                scrolledDistance = 0;
+            } else if (scrolledDistance < -HIDE_THRESHOLD && !controlsVisible) {
+                onShow();
+                controlsVisible = true;
+                scrolledDistance = 0;
+            }
         }
 
         if((controlsVisible && dy>0) || (!controlsVisible && dy<0)) {

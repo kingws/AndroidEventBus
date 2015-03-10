@@ -50,7 +50,7 @@ public class MainActivity extends ActionBarActivity implements
 
     private AlertDialog mAlertDialog;
 
-    private boolean toolbarShowing = true;
+    public boolean toolbarShowing = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceStateIn) {
@@ -149,9 +149,9 @@ public class MainActivity extends ActionBarActivity implements
     public void onInstagramFragmentInteraction(String imageUrl, String userName, String linkURL) {
         menuValidation(false);
 
-        if (!toolbarShowing) {
-            showViews();
-        }
+//        if (!toolbarShowing) {
+//            showViews();
+//        }
 
         Fragment mFragment = InstagramImageDisplayFragment.newInstance(getApplicationContext(),
                 imageUrl, userName, linkURL);
@@ -172,8 +172,6 @@ public class MainActivity extends ActionBarActivity implements
     public void onBackPressed() {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-
-        hideViews();
 
         menuValidation(true);
 
@@ -280,13 +278,20 @@ public class MainActivity extends ActionBarActivity implements
     public void hideViews() {
         mToolbar.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.translate_up_off));
-        toolbarShowing = false;
+        setToolbarShowing(false);
     }
 
     public void showViews() {
         mToolbar.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.translate_up_on));
-        toolbarShowing = true;
+        setToolbarShowing(true);
     }
 
+    public boolean isToolbarShowing() {
+        return toolbarShowing;
+    }
+
+    public void setToolbarShowing(boolean toolbarShowing) {
+        this.toolbarShowing = toolbarShowing;
+    }
 }
