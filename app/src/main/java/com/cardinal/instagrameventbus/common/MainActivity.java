@@ -10,11 +10,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -41,6 +43,8 @@ public class MainActivity extends ActionBarActivity implements
 
     public SharedPreferences mySharedPreferences;
 
+    public Toolbar mToolbar;
+
     private String mInstagramHashtag;
 
     private AlertDialog mAlertDialog;
@@ -53,8 +57,16 @@ public class MainActivity extends ActionBarActivity implements
 
         mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        initToolbar();
+
         loadPref();
 
+    }
+
+    private void initToolbar() {
+        mToolbar = (Toolbar) findViewById(R.id.custom_toolbar);
+        setSupportActionBar(mToolbar);
+        mToolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
     }
 
     private void showFragment() {
@@ -127,7 +139,7 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void setTitle(CharSequence textIn) {
-        getSupportActionBar().setTitle(textIn);
+        mToolbar.setTitle(textIn);
     }
 
     @Override
@@ -138,6 +150,7 @@ public class MainActivity extends ActionBarActivity implements
                 imageUrl, userName, linkURL);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_nav_back);
 
         getFragmentManager()
                 .beginTransaction()
@@ -150,6 +163,8 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void onBackPressed() {
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         menuValidation(true);
 
@@ -173,15 +188,20 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        loadPref();
+        if (!mInstagramHashtag.equalsIgnoreCase(getHashtagFromPrefs())) {
+            loadPref();
+        }
     }
 
     private void loadPref(){
-
-        mInstagramHashtag = mySharedPreferences.getString("instagram_preference", "Apple");
+        mInstagramHashtag = getHashtagFromPrefs();
         setTitle(mInstagramHashtag);
         showFragment();
+    }
 
+    private String getHashtagFromPrefs() {
+        String name = mySharedPreferences.getString("instagram_preference", "Apple");
+        return name;
     }
 
     private void startInstagramIntent() {
@@ -242,4 +262,15 @@ public class MainActivity extends ActionBarActivity implements
         this.mAlertDialog.show();
 
     }
+
+    public void hideViews() {
+        mToolbar.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.translate_up_off));
+    }
+
+    public void showViews() {
+        mToolbar.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.translate_up_on));
+    }
+
 }

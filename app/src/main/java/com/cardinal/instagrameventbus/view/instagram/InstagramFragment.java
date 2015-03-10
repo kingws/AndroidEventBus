@@ -10,15 +10,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.cardinal.instagrameventbus.R;
 import com.cardinal.instagrameventbus.adapter.InstagramRecyclerView;
+import com.cardinal.instagrameventbus.common.MainActivity;
 import com.cardinal.instagrameventbus.controller.BusProvider;
 import com.cardinal.instagrameventbus.events.GetInstagramResultsEvent;
 import com.cardinal.instagrameventbus.events.InstagramResultsLoadedEvent;
 import com.cardinal.instagrameventbus.events.InstagramResultsLoadedNextPageEvent;
-import com.cardinal.instagrameventbus.listeners.EndlessRecyclerOnScrollListener;
+import com.cardinal.instagrameventbus.listeners.CustomRecyclerOnScrollListener;
 import com.cardinal.instagrameventbus.listeners.RecyclerItemClickListener;
 import com.cardinal.instagrameventbus.model.Instagram;
 import com.cardinal.instagrameventbus.utils.AppConstants;
@@ -82,9 +84,20 @@ public class InstagramFragment extends Fragment implements Callback<List<Instagr
             mRecyclerView.setAdapter(mAdapter);
         }
     }
+
     private void updateScrollListener() {
 
-        mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
+        mRecyclerView.setOnScrollListener(new CustomRecyclerOnScrollListener(mLayoutManager) {
+            @Override
+            public void onHide() {
+                ((MainActivity)getActivity()).hideViews();
+            }
+
+            @Override
+            public void onShow() {
+                ((MainActivity)getActivity()).showViews();
+            }
+
             @Override
             public void onLoadMore(int current_page) {
                 BusProvider.getInstance().post(new GetInstagramResultsEvent(mHashtag, mNextMaxID));
@@ -120,6 +133,8 @@ public class InstagramFragment extends Fragment implements Callback<List<Instagr
         updateScrollListener();
 		return view;
 	}
+
+
 
     @Subscribe
 	public void instagramResultsLoadedEvent(InstagramResultsLoadedEvent event) {
@@ -195,6 +210,9 @@ public class InstagramFragment extends Fragment implements Callback<List<Instagr
     }
 
     public interface OnInstagramFragmentInteractionListener {
-		public void onInstagramFragmentInteraction(String imageUrl, String userName, String linkURL);
-	}
+
+        public void onInstagramFragmentInteraction(String imageUrl, String userName, String linkURL);
+
+    }
+
 }

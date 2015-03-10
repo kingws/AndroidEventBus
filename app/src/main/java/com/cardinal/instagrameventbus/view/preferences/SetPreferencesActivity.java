@@ -1,10 +1,9 @@
 package com.cardinal.instagrameventbus.view.preferences;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
 
 import com.cardinal.instagrameventbus.R;
 
@@ -17,20 +16,28 @@ import com.cardinal.instagrameventbus.R;
  */
 public class SetPreferencesActivity extends ActionBarActivity {
 
-    private String mInstagamHashTag;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mInstagamHashTag = mySharedPreferences.getString("instagram_preference", "Apple");
-        setTitle(getResources().getString(R.string.instagram_pref_activity_title));
+        setContentView(R.layout.activity_settings_prefs);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getFragmentManager().beginTransaction().replace(android.R.id.content,
+        initToolbar();
+
+        getFragmentManager().beginTransaction().replace(R.id.settings_frame_container,
                 new PrefsFragment()).commit();
 
+    }
+
+    private void initToolbar() {
+        mToolbar = (Toolbar) findViewById(R.id.custom_prefs_toolbar);
+        setSupportActionBar(mToolbar);
+        mToolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
+        setTitle(getResources().getString(R.string.instagram_pref_activity_title));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_nav_back);
     }
 
     @Override

@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<style name="IEBAppTheme" parent="Theme.AppCompat.Light">
-		<!-- Here we setting appcompat’s actionBarStyle -->
-		<item name="actionBarStyle">@style/IEBActionBar</item>
-		<item name="actionMenuTextColor">@color/white</item>
-
+	<style name="IEBAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
 		<!-- ...and here we setting appcompat’s color theming attrs -->
 		<item name="colorPrimary">@color/primary</item>
 		<item name="colorPrimaryDark">@color/primary_dark</item>
@@ -16,16 +12,6 @@
 
         <item name="android:scrollbarThumbVertical">@drawable/scrollbar</item>
 
-	</style>
-
-	<!-- ActionBar styles -->
-	<style name="IEBActionBar" parent="@style/Widget.AppCompat.ActionBar">
-		<item name="android:windowContentOverlay">@null</item>
-
-		<!-- Support library compatibility -->
-		<item name="elevation">0dp</item>
-		<item name="background">@color/primary</item>
-		<item name="titleTextStyle">@style/IEBActionBarTitleText</item>
 	</style>
 
     <!-- Overflow button -->
