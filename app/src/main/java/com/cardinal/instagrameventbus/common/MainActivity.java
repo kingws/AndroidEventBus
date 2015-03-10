@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cardinal.instagrameventbus.R;
 import com.cardinal.instagrameventbus.utils.AppConstants;
@@ -48,6 +49,8 @@ public class MainActivity extends ActionBarActivity implements
     private String mInstagramHashtag;
 
     private AlertDialog mAlertDialog;
+
+    private boolean toolbarShowing = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceStateIn) {
@@ -146,6 +149,10 @@ public class MainActivity extends ActionBarActivity implements
     public void onInstagramFragmentInteraction(String imageUrl, String userName, String linkURL) {
         menuValidation(false);
 
+        if (!toolbarShowing) {
+            showViews();
+        }
+
         Fragment mFragment = InstagramImageDisplayFragment.newInstance(getApplicationContext(),
                 imageUrl, userName, linkURL);
 
@@ -165,6 +172,8 @@ public class MainActivity extends ActionBarActivity implements
     public void onBackPressed() {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+        hideViews();
 
         menuValidation(true);
 
@@ -243,7 +252,12 @@ public class MainActivity extends ActionBarActivity implements
                 mAlertDialog.cancel();
                 Intent googlePlayIntent = new Intent(Intent.ACTION_VIEW);
                 googlePlayIntent.setData(Uri.parse("market://details?id=com.instagram.android"));
-                startActivity(googlePlayIntent);
+
+                if (Utils.isIntentAvailable(getApplicationContext(), googlePlayIntent)) {
+                    startActivity(googlePlayIntent);
+                } else {
+                    Toast.makeText(getApplicationContext(), "No supported viewer...", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -266,11 +280,13 @@ public class MainActivity extends ActionBarActivity implements
     public void hideViews() {
         mToolbar.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.translate_up_off));
+        toolbarShowing = false;
     }
 
     public void showViews() {
         mToolbar.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.translate_up_on));
+        toolbarShowing = true;
     }
 
 }
