@@ -149,10 +149,6 @@ public class MainActivity extends ActionBarActivity implements
     public void onInstagramFragmentInteraction(String imageUrl, String userName, String linkURL) {
         menuValidation(false);
 
-//        if (!toolbarShowing) {
-//            showViews();
-//        }
-
         Fragment mFragment = InstagramImageDisplayFragment.newInstance(getApplicationContext(),
                 imageUrl, userName, linkURL);
 
@@ -183,7 +179,7 @@ public class MainActivity extends ActionBarActivity implements
 
         getFragmentManager().popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-        setTitle(mInstagramHashtag);
+        setTitle("#" + mInstagramHashtag);
 
         //If the fragment is the agenda fragment, exit
         if (fragment instanceof InstagramFragment) {
@@ -202,7 +198,7 @@ public class MainActivity extends ActionBarActivity implements
 
     private void loadPref(){
         mInstagramHashtag = getHashtagFromPrefs();
-        setTitle(mInstagramHashtag);
+        getSupportActionBar().setTitle("#" + mInstagramHashtag);
         showFragment();
     }
 
