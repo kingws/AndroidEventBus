@@ -88,7 +88,8 @@ It's simple, fairly straight forward, but what is that InstagramClient object?? 
 
 Retrofit is a type-safe REST client for Android and Java.  With this library you can request the webservices of a REST api with POST, GET and more. This library is great, but we need a good architecture to do it correctly.  I'll dig deeper into each object, but for starters we'll need to set up the following:
 
-* Rest Adapter
+* REST Adapter
+* REST Client
 * API Service with Parameters
  * GET, POST, DELETE... for this app I'm only using GET
 * POJOs
@@ -137,6 +138,36 @@ public class InstagramRestClient {
 ```
 moving on...
 
+### REST Client
+
+The REST client is the proverbial workhorse.  It generates in implementation of our API, and contains the methods and callbacks to get data and return it to the subscriber (detalis coming...).  So, our client generates our API implementation:
+
+```Java
+private static InstagramApi service = InstagramRestAdapter.getInstance().create(InstagramApi.class);
+```
+
+and it contains the methods and callbacks to handled the data:
+
+```Java
+public static void getInstagramDataApi(String hashtag) {
+    service.getInstagramImages(hashtag, new Callback<GetInstagramResult>() {
+        @Override
+        public void success(GetInstagramResult getInstagramResult, Response response) {
+            Logger.d(TAG, "Success grabbing Instagram data!!");
+            BusProvider.getInstance().post(new InstagramResultsLoadedEvent(true, getInstagramResult));
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            Logger.e(TAG, "Error trying to get Instagram Images!!", error);
+            BusProvider.getInstance().post(new InstagramResultsLoadedEvent(false, null));
+        }
+    });
+}
+```
+
+While I did not take advantage of it in this app, we do have the ability to create custom error handling by extending the RetrofitError object.
+
 ### API Service with Parameters
 
 For this app, I'm only using the GET parameter, but syntactically there's no difference between GET, POST, etc.  We're making two web service calls in this app.  For both calls we're utilizing the @Path annotation to replace the hashtag piece of our URI.  For the second call, we're adding a @Query parameter of "max_tag_id" to our request (there's several more annotations you can add to your request, check out [Retrofit](http://square.github.io/retrofit/) for more details):
@@ -163,7 +194,7 @@ In my opinion, this little secret I'm going to tell you about is worth the cost 
 
 Once you've taken advantage of the awesome sauce I mentioned in the previous paragraph, you can drop your newly created (and annotaded...and maybe Parcelable) POJOs into your project.  Now, back to the callback in the previous section.  This is where the proverbial magic happens...  
 
-The GetInstagramResult object is where the serialization occurs.  When the service call is made, the Callback fires and the JSON reponse is deserialized into the GetInstagramResult object, which is returned to the method subscribed to that event.  Remember at the top of the README, when I said "we need to subscribe to that event so we can "do stuff" with the response when the event is finished."?  Well, now it's finished.  We've come full circle and have an object to update our UI with, which brings us to our next and final section that I so eloquently referred to as "Added Bonuses".  Man, I'm giving lots of free stuff out here.
+The GetInstagramResult object is where the serialization occurs.  When the service call is made, the Callback fires and the JSON reponse is deserialized into the GetInstagramResult object, which is returned to the overridden "success" or "failure" method in our client (see above).  Our client then publishes the event of type InstagramResultsLoaded, which is the event subscribed to by our fragment.  Remember at the top of the README, when I said "we need to subscribe to the response event so we can "do stuff" with the response when the event is finished."?  Well, now it's finished.  We've come full circle and have an object to update our UI with, which brings us to our next and final section that I so eloquently referred to as "Added Bonuses".  Man, I'm giving lots of free stuff out here.
 
 ## Added Bonuses
  
