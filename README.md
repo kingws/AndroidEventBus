@@ -139,7 +139,7 @@ moving on...
 
 ### API Service with Parameters
 
-For this app, I'm only using the POST parameter, but syntactically there's no difference between GET, POST, etc.  We're making two web service calls in this app.  For both calls we're utilizing the @Path annotation to replace the hashtag piece of our URI.  For the second call, we're adding a @Query parameter of "max_tag_id" to our request (there's several more annotations you can add to your request, check out [Retrofit](http://square.github.io/retrofit/) for more details):
+For this app, I'm only using the GET parameter, but syntactically there's no difference between GET, POST, etc.  We're making two web service calls in this app.  For both calls we're utilizing the @Path annotation to replace the hashtag piece of our URI.  For the second call, we're adding a @Query parameter of "max_tag_id" to our request (there's several more annotations you can add to your request, check out [Retrofit](http://square.github.io/retrofit/) for more details):
 
 ```Java
 public interface InstagramApi {
