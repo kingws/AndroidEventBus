@@ -166,7 +166,7 @@ public static void getInstagramDataApi(String hashtag) {
 }
 ```
 
-While I did not take advantage of it in this app, we do have the ability to create custom error handling by extending the RetrofitError object.
+While I did not take advantage of it in this app, we do have the ability to create custom error handling by implementing the ErrorHandler interface.
 
 ### API Service with Parameters
 
