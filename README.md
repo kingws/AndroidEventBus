@@ -63,7 +63,7 @@ Once you have your bus set up and registered, you simply publish your events for
 BusProvider.getInstance().post(new GetInstagramResultsEvent(mHashtag));
 ```
 
-Now that we've published our event, we need to subscribe to that event so we can "do stuff" with the response when the event is finished.  To do that, we simply annotate a method with @Subscribe.  To listen for the GetInstagramResultsEvent, we add the following @Subscribe method:
+Now that we've published our event, we need to subscribe to the response event so we can "do stuff" with the response when the event is finished.  To do that, we simply annotate a method with @Subscribe.  To listen for the GetInstagramResultsEvent, we add the following @Subscribe method:
 
 ```Java
 @Subscribe
