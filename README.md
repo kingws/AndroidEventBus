@@ -86,7 +86,7 @@ It's simple, fairly straight forward, but what is that InstagramClient object?? 
 
 ## Retrofit
 
-Retrofit is a type-safe client for Android and Java.  With this library you can request the webservices of a REST api with POST, GET and more. This library is great, but we need a good architecture to do it correctly.  I'll dig deeper into each object, but for starters we'll need to set up the following:
+Retrofit is a type-safe REST client for Android and Java.  With this library you can request the webservices of a REST api with POST, GET and more. This library is great, but we need a good architecture to do it correctly.  I'll dig deeper into each object, but for starters we'll need to set up the following:
 
 * Rest Adapter
 * API Service with Parameters
